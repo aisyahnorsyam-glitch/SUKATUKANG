@@ -49,3 +49,7 @@ Muat naik kandungan direktori ini ke hosting statik. Tiada pangkalan data, kunci
 ## Aset
 
 Gambar dan logo dibekalkan oleh pemilik Sukatukang. Hak aset kekal pada pemilik masing-masing. Video kekal dihoskan di TikTok. Font Fraunces dan Hanken Grotesk tertakluk pada lesen sumber asal masing-masing.
+
+## Warna jenama
+
+Palet laman diambil daripada logo asal Sukatukang: navy `#12172B` dan beige `#D0C8BD`. Tona cerah digunakan untuk latar, dengan navy untuk teks dan bahagian utama. Butang utama menggunakan beige dengan teks navy. Pemboleh ubah warna jenama berada di permulaan `style.css`.
