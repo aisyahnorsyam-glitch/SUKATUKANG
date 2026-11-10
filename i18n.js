@@ -714,6 +714,7 @@
     "ms": "Bahasa laman ditukar kepada Bahasa Melayu."
   }
 };
+  translations['video.unconfirmed'] = { en: 'If playback does not start, press Play or watch on TikTok.', ms: 'Jika video tidak bermula, tekan Main atau buka di TikTok.' };
   const validLanguage = value => value === 'en' || value === 'ms';
   let language = 'en';
   function t(key, values = {}) {
