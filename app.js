@@ -1,4 +1,5 @@
 'use strict';
+const tr = (key, values) => window.SiteI18n.t(key, values);
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 if (!reducedMotion.matches && 'IntersectionObserver' in window) {
   const observer = new IntersectionObserver(entries => {
@@ -10,10 +11,11 @@ if (!reducedMotion.matches && 'IntersectionObserver' in window) {
 reducedMotion.addEventListener?.('change', event => { if(event.matches) document.documentElement.classList.remove('js-motion'); });
 const menuButton = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('#navigasi');
-function closeMenu() { navigation.classList.remove('open'); menuButton.setAttribute('aria-expanded','false'); menuButton.setAttribute('aria-label','Buka menu'); }
+function updateMenuLabel() { menuButton.setAttribute('aria-label', tr(menuButton.getAttribute('aria-expanded') === 'true' ? 'menu.close' : 'menu.open')); }
+function closeMenu() { navigation.classList.remove('open'); menuButton.setAttribute('aria-expanded','false'); updateMenuLabel(); }
 menuButton.addEventListener('click', () => {
   const open = menuButton.getAttribute('aria-expanded') !== 'true';
-  menuButton.setAttribute('aria-expanded', String(open)); menuButton.setAttribute('aria-label', open ? 'Tutup menu' : 'Buka menu'); navigation.classList.toggle('open',open);
+  menuButton.setAttribute('aria-expanded', String(open)); updateMenuLabel(); navigation.classList.toggle('open',open);
 });
 navigation.querySelectorAll('a').forEach(link => link.addEventListener('click',closeMenu));
 document.addEventListener('click',event => { if(!event.target.closest('.header')) closeMenu(); });
@@ -24,8 +26,9 @@ const filterButtons = [...document.querySelectorAll('[data-filter]')];
 filterButtons.forEach(button => button.addEventListener('click',()=>{
   filterButtons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
   figures.forEach(figure=>{figure.hidden=button.dataset.filter!=='semua' && figure.dataset.category!==button.dataset.filter;});
-  document.querySelector('#gallery-count').textContent=figures.filter(figure=>!figure.hidden).length+' hasil kerja';
+  updateGalleryCount();
 }));
+function updateGalleryCount() { const count = figures.filter(figure => !figure.hidden).length; document.querySelector('#gallery-count').textContent = tr(count === 1 ? 'gallery.count.one' : 'gallery.count.many', { count }); }
 const lightbox = document.querySelector('#lightbox');
 let activeImage = 0;
 let lastTrigger = null;
@@ -37,7 +40,7 @@ function renderImage() {
   document.querySelector('#lightbox-title').textContent=button.dataset.title;
   document.querySelector('#lightbox-caption').textContent=button.dataset.caption;
   document.querySelector('#lightbox-count').textContent=(activeImage+1)+' / '+buttons.length;
-  document.querySelector('#lightbox-enquiry').href='https://wa.me/60125420514?text='+encodeURIComponent('Salam, saya berminat dengan rekaan '+button.dataset.title+' dalam galeri SukaTukang. Boleh saya dapatkan maklumat lanjut?');
+  document.querySelector('#lightbox-enquiry').setAttribute('href', 'https://wa.me/60125420514?text='+encodeURIComponent(tr('whatsapp.project', { project: button.dataset.title })));
 }
 document.querySelectorAll('.gallery-open').forEach(button=>button.addEventListener('click',()=>{
   lastTrigger=button; activeImage=visibleButtons().indexOf(button); renderImage();lightbox.showModal();document.body.classList.add('modal-open');
@@ -50,3 +53,11 @@ lightbox.addEventListener('click',event=>{if(event.target===lightbox){const rect
 lightbox.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'){event.preventDefault();changeImage(-1);}if(event.key==='ArrowRight'){event.preventDefault();changeImage(1);}});
 lightbox.addEventListener('close',()=>{document.body.classList.remove('modal-open');lastTrigger?.focus();});
 document.querySelector('#year').textContent=new Date().getFullYear();
+
+document.addEventListener('site:languagechange', () => {
+  updateMenuLabel();
+  updateGalleryCount();
+  if (lightbox.open) renderImage();
+});
+updateMenuLabel();
+updateGalleryCount();

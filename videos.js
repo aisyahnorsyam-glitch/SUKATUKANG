@@ -1,5 +1,6 @@
 'use strict';
 (() => {
+  const tr = (key, values) => window.SiteI18n.t(key, values);
   const cards = [...document.querySelectorAll('[data-project-video]')];
   if (!cards.length) return;
   const playerOrigin = 'https://www.tiktok.com';
@@ -12,8 +13,9 @@
     label: card.querySelector('.project-play span'), icon: card.querySelector('.project-play use'),
     status: card.querySelector('.project-video-state'), feedback: card.querySelector('.video-feedback'),
     number: index + 1, ready: false, visible: !supportsObserver, playing: false,
-    target: null, manualPaused: false, manualPlay: false, blocked: false, failed: false
+    feedbackKey: null, target: null, manualPaused: false, manualPlay: false, blocked: false, failed: false
   }));
+  function setFeedback(player, key) { player.feedbackKey = key; player.feedback.textContent = key ? tr(key) : ''; }
   function send(player, type) {
     player.frame.contentWindow?.postMessage({ type, value: undefined, 'x-tiktok-player': true }, playerOrigin);
   }
@@ -23,11 +25,12 @@
   }
   function updateButton(player) {
     const active = player.playing || player.target === 'play';
-    player.label.textContent = active ? 'Jeda' : 'Main';
-    player.button.setAttribute('aria-label', (active ? 'Jeda' : 'Main') + ' video projek ' + player.number);
+    player.label.textContent = tr(active ? 'video.pause' : 'video.play');
+    player.button.setAttribute('aria-label', tr(active ? 'video.pauseLabel' : 'video.playLabel', { number: player.number }));
     player.icon.setAttribute('href', active ? '#pause' : '#play');
     player.card.classList.toggle('is-playing', player.playing);
-    player.status.textContent = player.playing ? 'Sedang dimainkan' : 'Tanpa bunyi';
+    player.status.textContent = tr(player.playing ? 'video.playing' : 'video.muted');
+    if (player.feedbackKey) player.feedback.textContent = tr(player.feedbackKey);
   }
   function sync(player) {
     const target = allowedToPlay(player) ? 'play' : 'pause';
@@ -41,7 +44,7 @@
   function syncAll() { players.forEach(sync); }
   function updateAutoButton() {
     autoButton.setAttribute('aria-pressed', String(autoEnabled));
-    autoButton.querySelector('.autoplay-label').textContent = 'Main automatik: ' + (autoEnabled ? 'aktif' : 'tidak aktif');
+    autoButton.querySelector('.autoplay-label').textContent = tr(autoEnabled ? 'video.autoOn' : 'video.autoOff');
   }
   updateAutoButton();
   if (!supportsObserver) autoButton.disabled = true;
@@ -57,8 +60,8 @@
       player.manualPaused = pause;
       player.manualPlay = !pause;
       player.blocked = false;
-      player.feedback.textContent = '';
-      if (!player.ready && !pause) player.feedback.textContent = 'Menunggu pemain TikTok. Anda juga boleh buka video terus di TikTok.';
+      setFeedback(player, null);
+      if (!player.ready && !pause) setFeedback(player, 'video.waiting');
       sync(player);
     });
   });
@@ -83,7 +86,7 @@
     if (!data || data['x-tiktok-player'] !== true) return;
     if (data.type === 'onPlayerReady') {
       player.ready = true; player.failed = false; player.target = null;
-      player.button.disabled = false; player.feedback.textContent = '';
+      player.button.disabled = false; setFeedback(player, null);
       send(player, 'mute'); sync(player);
     } else if (data.type === 'onStateChange') {
       const state = Number(data.value);
@@ -94,7 +97,7 @@
         if (player.target !== 'play' && player.visible && !document.hidden && !document.body.classList.contains('modal-open')) {
           player.manualPlay = true; player.manualPaused = false; player.blocked = false;
         }
-        player.feedback.textContent = '';
+        setFeedback(player, null);
         if (!allowedToPlay(player)) { player.target = 'pause'; send(player, 'pause'); }
       } else if (state === 2 || state === 0) {
         player.playing = false;
@@ -109,10 +112,10 @@
       player.playing = false; player.target = 'pause'; player.manualPlay = false;
       if (code === 3002) {
         player.blocked = true;
-        player.feedback.textContent = 'Pelayar menyekat main automatik. Tekan Main atau buka di TikTok.';
+        setFeedback(player, 'video.blocked');
       } else {
         player.failed = true; player.button.disabled = true;
-        player.feedback.textContent = 'Video tidak dapat dimuatkan di sini. Gunakan pautan Buka di TikTok.';
+        setFeedback(player, 'video.failed');
       }
       send(player, 'pause'); updateButton(player);
     }
@@ -125,4 +128,5 @@
   });
   window.addEventListener('pagehide', () => players.forEach(player => { if (player.ready) { player.target = 'pause'; send(player, 'pause'); } }));
   window.addEventListener('pageshow', syncAll);
+  document.addEventListener('site:languagechange', () => { updateAutoButton(); players.forEach(updateButton); });
 })();
