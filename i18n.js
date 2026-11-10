@@ -715,6 +715,44 @@
   }
 };
   translations['video.unconfirmed'] = { en: 'If playback does not start, press Play or watch on TikTok.', ms: 'Jika video tidak bermula, tekan Main atau buka di TikTok.' };
+  Object.assign(translations, {
+  "founder.eyebrow": {
+    "en": "The person behind the craft",
+    "ms": "Insan di sebalik hasil kerja"
+  },
+  "founder.title": {
+    "en": "Meet Syahmi,",
+    "ms": "Kenali Syahmi,"
+  },
+  "founder.subtitle": {
+    "en": "the maker behind Sukatukang.",
+    "ms": "pengasas di sebalik Sukatukang."
+  },
+  "founder.role": {
+    "en": "Founder, Sukatukang",
+    "ms": "Pengasas Sukatukang"
+  },
+  "founder.first": {
+    "en": "Before Sukatukang, Syahmi explored printing, laser cutting, fabrication and welding. Those experiences came together when he built a wooden booth for an event—a practical solution that sparked interest from other traders.",
+    "ms": "Sebelum Sukatukang, Syahmi meneroka bidang percetakan, laser cutting, fabrikasi dan kimpalan. Pengalaman itu bertemu apabila beliau membina sebuah booth kayu untuk acara—penyelesaian praktikal yang menarik perhatian peniaga lain."
+  },
+  "founder.second": {
+    "en": "Today, his focus is turning a reference image or an early idea into a cart that works in real life. He considers measurements, balance, materials and finishing, with care for how each piece carries a client’s brand and supports their day-to-day business.",
+    "ms": "Kini, fokus beliau ialah menterjemahkan gambar rujukan atau idea awal menjadi cart yang benar-benar praktikal. Ukuran, keseimbangan, bahan dan kemasan diberi perhatian, supaya setiap hasil kerja membawa identiti jenama pelanggan dan menyokong operasi harian mereka."
+  },
+  "founder.note": {
+    "en": "Built through making, learning and refining. One project at a time.",
+    "ms": "Dibina melalui usaha, pembelajaran dan penambahbaikan. Satu projek demi satu projek."
+  },
+  "founder.cta": {
+    "en": "Meet Syahmi on TikTok",
+    "ms": "Kenali Syahmi di TikTok"
+  },
+  "founder.alt": {
+    "en": "Syahmi Sukatukang wearing a Sukatukang polo shirt and hearing protection, holding a cordless drill",
+    "ms": "Syahmi Sukatukang memakai baju polo Sukatukang dan pelindung telinga sambil memegang drill tanpa wayar"
+  }
+});
   const validLanguage = value => value === 'en' || value === 'ms';
   let language = 'en';
   function t(key, values = {}) {

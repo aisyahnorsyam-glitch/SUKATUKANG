@@ -7,6 +7,7 @@ Dibina menggunakan HTML, CSS dan JavaScript biasa, tanpa React atau langkah buil
 ## Kandungan
 
 - Pengenalan syarikat dan servis pertukangan mengikut tempahan.
+- Profil Syahmi Sukatukang dengan foto daripada bahan yang dibekalkan pemilik.
 - Tiga video projek pilihan melalui pemain TikTok rasmi.
 - Galeri bergambar dengan penapis dan paparan besar.
 - Pautan TikTok dan Instagram Sukatukang.
