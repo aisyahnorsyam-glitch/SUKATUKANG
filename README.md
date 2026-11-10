@@ -37,7 +37,9 @@ Video menggunakan iframe rasmi TikTok dan memerlukan sambungan internet. Video d
 
 ## Hosting
 
-Alamat GitHub Pages yang dikonfigurasikan: https://aisyahnorsyam-glitch.github.io/SUKATUKANG/
+Domain tersuai yang dikonfigurasikan: `sukatukang.com`. Domain memerlukan rekod DNS Cloudflare yang menunjuk ke GitHub Pages.
+
+Alamat asal GitHub Pages: https://aisyahnorsyam-glitch.github.io/SUKATUKANG/
 
 Muat naik kandungan direktori ini ke hosting statik. Tiada pangkalan data, kunci API atau proses build diperlukan. Untuk GitHub Pages, buka Settings → Pages, pilih Deploy from a branch, kemudian pilih branch `main` dan folder `/ (root)`. Fail `.nojekyll` disertakan supaya laman statik disajikan terus tanpa pemprosesan Jekyll. Kelayakan Pages bergantung pada pelan GitHub dan keterlihatan repositori.
 
